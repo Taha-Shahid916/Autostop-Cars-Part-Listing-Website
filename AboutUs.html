@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - AutoStop</title>
@@ -15,18 +16,24 @@
         body {
             font-family: sans-serif;
             overflow-x: hidden;
+            padding-top: 80px; /* Add padding to account for fixed header */
         }
 
         .container {
             width: 100%;
         }
 
-        /* Header Section */
+        /* Header Section - Made Sticky */
         .Section1 {
             height: 80px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #e9ecef;
-            position: relative;
+            position: fixed; /* Changed to fixed for sticky header */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1002; /* Higher z-index for sticky header */
+            width: 100%;
         }
 
         .header-nav {
@@ -37,10 +44,12 @@
             padding: 0 20px;
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
 
         .logo {
             flex-shrink: 0;
+            z-index: 1003;
         }
 
         .nav-container {
@@ -49,6 +58,45 @@
             justify-content: center;
         }
 
+        /* Hamburger Menu Button - Better Alignment */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1003;
+            position: relative;
+            border: none;
+            background: none;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #012D62;
+            margin: 2px 0;
+            transition: 0.3s ease;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Navigation Styles */
         ul {
             list-style-type: none;
             display: flex;
@@ -110,7 +158,7 @@
             background-color: #f9f9f9;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1000;
+            z-index: 1001;
             top: 100%;
             left: 0;
         }
@@ -128,6 +176,22 @@
         }
 
         .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Mobile Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .nav-overlay.active {
             display: block;
         }
 
@@ -292,32 +356,55 @@
             margin-bottom: 5px;
         }
 
-        /* Responsive Styles */
+        /* Mobile Responsive Styles */
         @media screen and (max-width: 968px) {
-            .header-nav {
-                flex-wrap: wrap;
+            body {
+                padding-top: 70px; /* Adjust for mobile header height */
+            }
+
+            .Section1 {
+                height: 70px;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .nav-container {
+                position: fixed;
+                top: 0;
+                left: -100%;
                 width: 100%;
-                order: 3;
+                height: 100vh;
+                background-color: rgba(248, 249, 250, 0.98);
+                backdrop-filter: blur(10px);
+                transition: left 0.3s ease;
+                z-index: 1000;
+                padding-top: 80px;
+            }
+
+            .nav-container.active {
+                left: 0;
             }
 
             ul {
                 flex-direction: column;
                 width: 100%;
-                background-color: rgba(248, 249, 250, 0.95);
-                padding: 10px 0;
-                border-top: 1px solid #e9ecef;
+                padding: 20px 0;
+                align-items: stretch;
+                background: none;
+                border: none;
             }
 
             li {
                 width: 100%;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
 
             li a {
-                padding: 12px 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                padding: 15px 30px;
+                font-size: 16px;
+                border-bottom: none;
             }
 
             .dropdown {
@@ -327,8 +414,9 @@
             .dropdown .dropbtn {
                 width: 100%;
                 justify-content: space-between;
-                padding: 12px 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                padding: 15px 30px;
+                font-size: 16px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
 
             .dropdown-content {
@@ -336,6 +424,16 @@
                 display: none;
                 box-shadow: none;
                 background-color: rgba(0, 0, 0, 0.05);
+                min-width: auto;
+            }
+
+            .dropdown-content a {
+                padding: 12px 50px;
+                font-size: 14px;
+            }
+
+            .dropdown.active .dropdown-content {
+                display: block;
             }
 
             .team-grid {
@@ -350,23 +448,40 @@
         }
 
         @media screen and (max-width: 640px) {
+            body {
+                padding-top: 60px;
+            }
+
             .Section1 {
-                height: auto;
-                padding: 10px 0;
+                height: 60px;
             }
 
             .header-nav {
-                flex-direction: column;
-                padding: 10px;
+                padding: 0 15px;
             }
 
             .logo {
-                margin-bottom: 10px;
+                margin-bottom: 0;
             }
 
             .Section1 img {
-                width: 100px;
-                height: 55px;
+                width: 90px;
+                height: 45px;
+            }
+
+            .hamburger {
+                width: 35px;
+                height: 35px;
+                padding: 6px;
+            }
+
+            .hamburger span {
+                width: 20px;
+                height: 2px;
+            }
+
+            .nav-container {
+                padding-top: 70px;
             }
 
             .Section2 {
@@ -426,11 +541,18 @@
                     </a>
                 </div>
 
-                <div class="nav-container">
+                <!-- Hamburger Menu Button -->
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="nav-container" id="navContainer">
                     <ul>
                         <li><a href="./Project.html">Home</a></li>
                         
-                        <div class="dropdown">
+                        <div class="dropdown" id="carsDropdown">
                             <button class="dropbtn">
                                 <a href="./Cars Main/Cars.html">Cars</a> 
                                 <i class="fa fa-caret-down"></i>
@@ -441,24 +563,24 @@
                                 <a href="./Car Files and Images/suzuki.html">Suzuki</a>
                                 <a href="./Car Files and Images/kia.html">Kia</a>
                                 <a href="./Car Files and Images/mercedes.html">Mercedes</a>
-                                <a href="./Car Files and Images/mg.html">Mg</a>
+                                <a href="./Car Files and Images/mg.html">MG</a>
                             </div>
                         </div>
                         
-                        <div class="dropdown">
+                        <div class="dropdown" id="bikesDropdown">
                             <button class="dropbtn">
                                 <a href="">Bikes</a>
                                 <i class="fa fa-caret-down"></i>
                             </button>
                             <div class="dropdown-content">
-                                <a href="../Bike Files and Images/SUZUKI-Bike.html">Suzuki</a>
-                                <a href="../Bike Files and Images/kawasaki.html">Kawasaki</a>
-                                <a href="../Bike Files and Images/honda-bike.html">Honda</a>
-                                <a href="../Bike Files and Images/Yamaha.html">Yamaha</a>
+                                <a href="./Bike Files and Images/SUZUKI-Bike.html">Suzuki</a>
+                                <a href="./Bike Files and Images/kawasaki.html">Kawasaki</a>
+                                <a href="./Bike Files and Images/honda-bike.html">Honda</a>
+                                <a href="./Bike Files and Images/Yamaha.html">Yamaha</a>
                             </div>
                         </div>
                         
-                        <div class="dropdown">
+                        <div class="dropdown" id="autostoreDropdown">
                             <button class="dropbtn">
                                 <a href="">AutoStore</a>
                                 <i class="fa fa-caret-down"></i>
@@ -581,6 +703,70 @@
                 </div>
             </div>
         </div>
+
+        <!-- Overlay for mobile menu -->
+        <div class="nav-overlay" id="navOverlay"></div>
     </div>
+
+    <script>
+        // Mobile Navigation Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navContainer = document.getElementById('navContainer');
+        const navOverlay = document.getElementById('navOverlay');
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        // Toggle mobile menu
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navContainer.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navContainer.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking overlay
+        navOverlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navContainer.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Handle dropdown clicks on mobile
+        dropdowns.forEach(dropdown => {
+            const dropbtn = dropdown.querySelector('.dropbtn');
+            dropbtn.addEventListener('click', (e) => {
+                if (window.innerWidth <= 968) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 968) {
+                hamburger.classList.remove('active');
+                navContainer.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+
+        // Close mobile menu when clicking navigation links
+        const navLinks = document.querySelectorAll('.nav-container a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    hamburger.classList.remove('active');
+                    navContainer.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
